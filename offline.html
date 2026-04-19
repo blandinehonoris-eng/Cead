@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#00c8ff">
+<title>Hors Ligne — ONG CEAD</title>
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<style>
+  :root {
+    --void: #030609;
+    --deep: #060d17;
+    --cyan: #00c8ff;
+    --gold: #C9A84C;
+    --text: #e8f4ff;
+    --muted: #6a9bbf;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Orbes d'ambiance */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.10;
+    pointer-events: none;
+    animation: drift 20s ease-in-out infinite;
+  }
+  .orb-1 { width:600px;height:600px;background:#7b2fff;top:-200px;left:-200px; }
+  .orb-2 { width:400px;height:400px;background:#00c8ff;bottom:-100px;right:-100px;animation-delay:-10s; }
+  @keyframes drift {
+    0%,100% { transform: translate(0,0); }
+    50%      { transform: translate(40px,-30px); }
+  }
+
+  /* Scanlines */
+  body::before {
+    content:'';
+    position:fixed;inset:0;
+    background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,200,255,.015) 3px,rgba(0,200,255,.015) 4px);
+    pointer-events:none;
+    z-index:1;
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 40px 24px;
+    max-width: 480px;
+  }
+
+  /* Logo animé */
+  .logo-ring {
+    width: 96px;
+    height: 96px;
+    border: 2px solid rgba(0,200,255,0.3);
+    border-top-color: var(--cyan);
+    border-radius: 50%;
+    margin: 0 auto 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: spin 3s linear infinite;
+    position: relative;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .logo-ring::after {
+    content: '📡';
+    font-size: 32px;
+    animation: spin 3s linear infinite reverse;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,200,255,0.08);
+    border: 1px solid rgba(0,200,255,0.25);
+    color: var(--cyan);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 24px;
+  }
+  .badge-dot {
+    width: 6px; height: 6px;
+    background: var(--cyan);
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity:1; transform:scale(1); }
+    50%      { opacity:0.4; transform:scale(0.7); }
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+  h1 span { color: var(--cyan); }
+
+  p {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+
+  .actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #7b2fff, #4a00d4);
+    color: white;
+    box-shadow: 0 4px 20px rgba(123,47,255,0.4);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(123,47,255,0.6); }
+  .btn-outline {
+    background: transparent;
+    color: var(--cyan);
+    border: 1px solid rgba(0,200,255,0.35);
+  }
+  .btn-outline:hover { background: rgba(0,200,255,0.08); }
+
+  /* Statut de connexion */
+  .status-bar {
+    margin-top: 48px;
+    padding: 16px 24px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+  }
+  .status-icon { font-size: 20px; flex-shrink: 0; }
+  .status-text strong {
+    display: block;
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .status-text span { font-size: 12px; color: var(--muted); }
+
+  /* Contenu offline disponible */
+  .cached-content {
+    margin-top: 24px;
+    text-align: left;
+  }
+  .cached-title {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .cached-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .cached-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    transition: background 0.2s;
+  }
+  .cached-link:hover { background: rgba(0,200,255,0.06); }
+  .cached-link span { color: var(--muted); font-size: 11px; }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<div class="container">
+  <div class="logo-ring"></div>
+
+  <div class="badge">
+    <div class="badge-dot"></div>
+    Mode Hors Ligne
+  </div>
+
+  <h1>Connexion <span>indisponible</span></h1>
+
+  <p>
+    Il semble que vous soyez hors ligne. Certaines pages mises en cache restent accessibles. 
+    Reconnectez-vous pour accéder au site complet de l'<strong>ONG CEAD</strong>.
+  </p>
+
+  <div class="actions">
+    <button class="btn btn-primary" onclick="window.location.reload()">
+      🔄 Réessayer
+    </button>
+    <a href="/" class="btn btn-outline">
+      🏠 Accueil
+    </a>
+  </div>
+
+  <div class="status-bar">
+    <div class="status-icon">📶</div>
+    <div class="status-text">
+      <strong id="status-title">Vérification de la connexion…</strong>
+      <span id="status-desc">Patientez un instant</span>
+    </div>
+  </div>
+
+  <div class="cached-content">
+    <div class="cached-title">Pages disponibles hors ligne</div>
+    <div class="cached-links">
+      <a href="/" class="cached-link">
+        🏠 Accueil <span>— Mis en cache</span>
+      </a>
+      <a href="#about" class="cached-link">
+        🏛️ À Propos du CEAD <span>— Mis en cache</span>
+      </a>
+      <a href="#services" class="cached-link">
+        🎯 Nos Programmes <span>— Mis en cache</span>
+      </a>
+      <a href="#contact" class="cached-link">
+        📬 Contact <span>— Mis en cache</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Vérification de la connexion
+  function updateStatus() {
+    const title = document.getElementById('status-title');
+    const desc  = document.getElementById('status-desc');
+    if (navigator.onLine) {
+      title.textContent = 'Connexion rétablie !';
+      desc.textContent  = 'Rechargement automatique dans 2 secondes…';
+      setTimeout(() => window.location.reload(), 2000);
+    } else {
+      title.textContent = 'Hors ligne';
+      desc.textContent  = 'Aucune connexion internet détectée';
+    }
+  }
+
+  updateStatus();
+  window.addEventListener('online',  updateStatus);
+  window.addEventListener('offline', updateStatus);
+
+  // Auto-retry toutes les 10s
+  setInterval(() => {
+    if (navigator.onLine) window.location.reload();
+  }, 10000);
+</script>
+</body>
+</html>
